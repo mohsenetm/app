@@ -1,0 +1,218 @@
+body {
+    font-family: 'Vazirmatn', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.content {
+    padding: 40px;
+    min-height: calc(100vh - 120px);
+    background: white;
+}
+
+.loading {
+    text-align: center;
+    padding: 80px 20px;
+    color: #666;
+    font-size: 1.2em;
+}
+
+.loading::after {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.error {
+    background: #e74c3c;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.markdown-content {
+    color: #333;
+    line-height: 1.8;
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.markdown-content h1 {
+    font-size: 2.5em;
+    border-bottom: 3px solid #3498db;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.markdown-content h2 {
+    font-size: 2em;
+    border-bottom: 2px solid #ecf0f1;
+    padding-bottom: 10px;
+    margin: 25px 0 20px 0;
+}
+
+.markdown-content blockquote {
+    border-right: 4px solid #3498db;
+    background: #f8f9fa;
+    padding: 20px;
+    margin: 25px 0;
+    border-radius: 8px;
+    font-style: italic;
+}
+
+.markdown-content pre {
+    background: #2d3748;
+    border-radius: 12px;
+    padding: 25px;
+    margin: 25px 0;
+    overflow-x: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.markdown-content pre code {
+    background: none;
+    padding: 0;
+    color: #e2e8f0;
+    font-size: 0.95em;
+    line-height: 1.6;
+}
+
+.markdown-content table {
+    margin: 25px 0;
+}
+
+.markdown-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 20px 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.actions {
+    background: #f8f9fa;
+    padding: 20px;
+    border-top: 1px solid #ecf0f1;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.action-btn {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+    padding: 15px 20px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 1em;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+    margin: 5px;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+}
+
+.action-btn:disabled {
+    background: #bdc3c7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.rating-buttons {
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.btn-again {
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+}
+
+.btn-hard {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.btn-good {
+    background: linear-gradient(135deg, #f39c12, #d68910);
+}
+
+.btn-easy {
+    background: linear-gradient(135deg, #27ae60, #229954);
+}
+
+.remaining-cards-count {
+    background: #2c3e50;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    margin: 0 10px 10px 0;
+    display: inline-block;
+    min-width: 40px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.time-display {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.time-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.time-badge:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.time-badge i {
+    font-size: 1.1rem;
+    opacity: 0.8;
+}
+
+.time-badge .badge {
+    font-weight: 500;
+    padding: 3px 8px;
+    font-size: 0.85rem;
+}
+
+pre{
+    direction: ltr;
+}
+
