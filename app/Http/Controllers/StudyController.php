@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\File;
 use App\Models\Deck;
 use App\Models\Card;
 use App\Models\CardReview;
@@ -52,6 +53,7 @@ class StudyController extends Controller
         return response()->json([
             'success' => true,
             'card_id' => $card->id,
+            'markdown' => $card->front,
             'front' => $card->front,
             'back' => $card->back,
             'remainingCards' => "Repetitions: {$userReview->repetitions}",
@@ -59,6 +61,26 @@ class StudyController extends Controller
             'good' => "Good: {$calculateNextInterval->goodInterval}",
             'hard' => "Hard: {$calculateNextInterval->hardInterval}",
             'again' => "Again: {$calculateNextInterval->againInterval}",
+        ]);
+    }
+
+    public function read(string $path, string $fileName): JsonResponse
+    {
+        $filePath = public_path("{$path}/{$fileName}.md");
+        
+        if (!File::exists($filePath)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'File not found'
+            ], 404);
+        }
+
+        $fileContent = File::get($filePath);
+        
+        return response()->json([
+            'success' => true,
+            'markdown' => $fileContent,
+            'card_id' => "{$path}/{$fileName}.md"
         ]);
     }
 

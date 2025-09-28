@@ -9,4 +9,8 @@ Route::get('/cards/{path}', function (string $path) {
     return view('app', compact('path'));
 });
 
+Route::get('/read/{path}/{fileName}', function (string $path, string $fileName) {
+    return view('read', compact('path', 'fileName'));
+});
+
 require __DIR__ . '/settings.php';
