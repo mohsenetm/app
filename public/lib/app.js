@@ -19,7 +19,7 @@ class MarkdownViewer {
     initializeState() {
         this.isLoading = false;
         this.apiUrl = this.container.dataset.apiUrl;
-        this.currentCardId = null;
+        this.name = null;
         this.currentSide = 'front';
         this.cardData = null;
     }
@@ -53,7 +53,7 @@ class MarkdownViewer {
         try {
             const requestData = {
                 action: action,
-                card_id: this.currentCardId
+                card_id: this.name
             };
 
             const response = await fetch(this.apiUrl, {
@@ -86,7 +86,7 @@ class MarkdownViewer {
 
                 // Update current card ID if provided
                 if (data.card_id !== undefined) {
-                    this.currentCardId = data.card_id;
+                    this.name = data.card_id;
                 }
                 this.updateStats(data);
             } else {
@@ -130,7 +130,7 @@ class MarkdownViewer {
         // Detect Persian characters (Unicode range: \u0600-\u06FF)
         const persianRegex = /[\u0600-\u06FF]/;
         const isPersian = persianRegex.test(text);
-        
+
         // Set direction attribute on container
         this.container.setAttribute('dir', isPersian ? 'rtl' : 'ltr');
     }

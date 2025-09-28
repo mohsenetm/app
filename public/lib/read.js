@@ -2,7 +2,7 @@ class MarkdownViewer {
     constructor() {
         this.container = document.getElementById('markdown-container');
         this.apiUrl = this.container?.dataset.apiUrl;
-        this.currentCardId = null;
+        this.name = null;
         this.intervalId = null;
 
         if (this.apiUrl) {
@@ -14,7 +14,7 @@ class MarkdownViewer {
         try {
             const requestData = {
                 action: 'initial',
-                card_id: this.currentCardId
+                card_id: this.name
             };
 
             const response = await fetch(this.apiUrl, {
@@ -35,8 +35,8 @@ class MarkdownViewer {
             if (data.success && data.markdown) {
                 this.renderMarkdown(data.markdown);
 
-                if (data.card_id) {
-                    this.currentCardId = data.card_id;
+                if (data.name) {
+                    this.name = data.name;
                     this.startIdTracking();
                 }
             } else {
@@ -77,12 +77,12 @@ class MarkdownViewer {
     }
 
     async sendCardId() {
-        if (!this.currentCardId) return;
+        if (!this.name) return;
 
         try {
             const requestData = {
                 action: 'initial',
-                card_id: this.currentCardId
+                name: this.name
             };
 
             const response = await fetch('/api/track-card', {
@@ -102,6 +102,7 @@ class MarkdownViewer {
         }
     }
 
+    //call this functions when browser is open and mouse in browser. AI!
     startIdTracking() {
         // Clear any existing interval
         if (this.intervalId) {

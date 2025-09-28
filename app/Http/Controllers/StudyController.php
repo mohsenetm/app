@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LogRead;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use App\Models\Deck;
 use App\Models\Card;
@@ -67,7 +69,7 @@ class StudyController extends Controller
     public function read(string $path, string $fileName): JsonResponse
     {
         $filePath = public_path("{$path}/{$fileName}.md");
-        
+
         if (!File::exists($filePath)) {
             return response()->json([
                 'success' => false,
@@ -76,11 +78,44 @@ class StudyController extends Controller
         }
 
         $fileContent = File::get($filePath);
-        
         return response()->json([
             'success' => true,
             'markdown' => $fileContent,
-            'card_id' => "{$path}/{$fileName}.md"
+            'name' => "{$path}/{$fileName}.md"
+        ]);
+    }
+
+    public function track(Request $request): JsonResponse
+    {
+        $logRead = LogRead::query()->where([
+            'name' => $request->name,
+            'is_main' => true
+        ])->first();
+
+        if (!$logRead) {
+            LogRead::query()->create([
+                'user_id' => 1,
+                'is_main' => true,
+                'name' => $request->name,
+                'time' => 1
+            ]);
+
+            return response()->json([
+                'success' => true,
+            ]);
+        }
+
+        $logRead->update(['time' => $logRead->time + 1]);
+
+        LogRead::query()->create([
+            'user_id' => 1,
+            'is_main' => false,
+            'name' => $request->name,
+            'time' => 1
+        ]);
+
+        return response()->json([
+            'success' => true,
         ]);
     }
 
