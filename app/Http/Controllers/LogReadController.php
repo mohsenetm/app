@@ -12,7 +12,7 @@ class LogReadController extends Controller
         $logReads = LogRead::query()->where('is_main', true)
             ->orderBy('id', 'desc')
             ->get();
-        
+
         return view('log-reads.index', compact('logReads'));
     }
 }
