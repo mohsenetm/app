@@ -102,17 +102,48 @@ class MarkdownViewer {
         }
     }
 
-    //call this functions when browser is open and mouse in browser. AI!
     startIdTracking() {
-        // Clear any existing interval
+        // Clear any existing interval and event listener
+        this.stopIdTracking();
+
+        // Define the visibility change handler
+        this.handleVisibilityChange = () => {
+            if (document.hidden) {
+                // Page is hidden, stop the interval
+                if (this.intervalId) {
+                    clearInterval(this.intervalId);
+                    this.intervalId = null;
+                }
+            } else {
+                // Page is visible, start the interval
+                this.sendCardId(); // Send immediately when page becomes visible
+                this.intervalId = setInterval(() => {
+                    this.sendCardId();
+                }, 3000);
+            }
+        };
+
+        // Add the event listener
+        document.addEventListener('visibilitychange', this.handleVisibilityChange);
+
+        // Start the interval if the page is currently visible
+        if (!document.hidden) {
+            this.sendCardId();
+            this.intervalId = setInterval(() => {
+                this.sendCardId();
+            }, 3000);
+        }
+    }
+
+    stopIdTracking() {
         if (this.intervalId) {
             clearInterval(this.intervalId);
+            this.intervalId = null;
         }
-
-        // Send ID every 30 seconds
-        this.intervalId = setInterval(() => {
-            this.sendCardId();
-        }, 30000);
+        if (this.handleVisibilityChange) {
+            document.removeEventListener('visibilitychange', this.handleVisibilityChange);
+            this.handleVisibilityChange = null;
+        }
     }
 
     showError(message) {

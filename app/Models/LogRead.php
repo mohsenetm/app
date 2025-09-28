@@ -13,6 +13,7 @@ class LogRead extends Model
     protected $fillable = [
         'user_id',
         'name',
+        'is_main',
         'time',
     ];
 
