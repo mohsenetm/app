@@ -166,13 +166,13 @@
                 @foreach($files as $file)
                     @php
                         $fileClearName = $file->getFileName();
-                        $fileClearName = ucfirst(str_replace('.md','',$fileClearName))
+                        $fileClearName = str_replace('.md','',$fileClearName)
                     @endphp
                     <li class="nav-item">
                         <a class="nav-link"
                            href="{{ route('read',['path'=>$path,'fileName'=>$fileClearName]) }}">
                             <i class="bi bi-speedometer2"></i>
-                            {{$fileClearName}}
+                            {{ucfirst($fileClearName)}}
                         </a>
                     </li>
                 @endforeach
