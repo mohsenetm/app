@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\LogRead;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
 use App\Models\Deck;
 use App\Models\Card;
@@ -98,7 +99,8 @@ class StudyController extends Controller
                 'user_id' => auth()->id(),
                 'is_main' => true,
                 'name' => $request->name,
-                'time' => 1
+                'time' => 1,
+                'day' => Carbon::now()->format('Y-m-d'),
             ]);
 
             return response()->json([

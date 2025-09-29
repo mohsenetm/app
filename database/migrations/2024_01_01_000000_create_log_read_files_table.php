@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->boolean('is_main')->default(false);
             $table->string('name');
             $table->unsignedInteger('time');
+            $table->date('day')->index();
             $table->timestamps();
         });
     }

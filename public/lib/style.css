@@ -220,3 +220,133 @@ pre{
     direction: ltr;
 }
 
+/* Sidebar Styles */
+.sidebar {
+    flex-basis: 20%; /* عرض اولیه ۲۰٪ */
+    flex-shrink: 0; /* اجازه نده کوچک شود */
+    background-color: #212529;
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.sidebar-flex {
+    flex-basis: 20%; /* عرض اولیه ۲۰٪ */
+    flex-shrink: 0; /* اجازه نده کوچک شود */
+    background-color: #212529;
+    color: white;
+    padding: 20px;
+}
+
+.sidebar.collapsed {
+    transform: translateX(-100%);
+}
+
+.sidebar .nav-link {
+    color: #adb5bd;
+    padding: 12px 20px;
+    border-radius: 0;
+    transition: all 0.3s ease;
+}
+
+.sidebar .nav-link:hover {
+    color: #fff;
+    background-color: #495057;
+}
+
+.sidebar .nav-link.active {
+    color: #fff;
+    background-color: #0d6efd;
+}
+
+.sidebar .nav-link i {
+    margin-right: 10px;
+    width: 16px;
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 250px;
+    transition: margin-left 0.3s ease;
+}
+
+.main-content.expanded {
+    margin-left: 0;
+}
+
+/* Top Navbar */
+.top-navbar {
+    background-color: #fff;
+    border-bottom: 1px solid #dee2e6;
+    padding: 0.5rem 1rem;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.show {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+/* Auth Pages */
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.form-control:focus {
+    border-color: #4e73df;
+    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+
+.btn-primary {
+    background-color: #4e73df;
+    border-color: #4e73df;
+}
+
+.btn-primary:hover {
+    background-color: #2e59d9;
+    border-color: #2653d4;
+}
+
+/* Side-by-side layout */
+.content {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+    padding: 0px;
+}
+
+.sidebar.collapsed {
+    margin-left: -250px;
+}
+
+#markdown-container {
+    flex-grow: 1;
+    padding-top: 20px;
+    transition: margin-right 0.3s ease;
+    color: white;
+}
+
+#markdown-container.expanded {
+    margin-right: 0;
+}
+

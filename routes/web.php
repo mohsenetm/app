@@ -4,7 +4,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LogReadController;
 use App\Http\Controllers\MarkdownDirectoryController;
 use App\Http\Controllers\StudyController;
+use App\Models\LogRead;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
@@ -27,6 +29,8 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
 });
+
+Route::get('test',[LogReadController::class, 'chart']);
 
 // Authenticated routes
 Route::middleware('auth')->group(function () {
