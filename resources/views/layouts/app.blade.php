@@ -15,10 +15,12 @@
         body {
             background-color: #f8f9fa;
         }
+
         .auth-card {
             max-width: 400px;
             margin: 50px auto;
         }
+
         .navbar-brand {
             font-weight: bold;
         }
@@ -43,7 +45,7 @@
                     </li>
                 @else
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('read') }}">Dashboard</a>
+                        <a class="nav-link" href="{{ route('read',['path'=>'laravel','fileName'=>'artisan']) }}">Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
