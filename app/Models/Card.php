@@ -24,7 +24,6 @@ class Card extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'user_id',
         'identifier',
         'content_md5',
         'deck_id',
