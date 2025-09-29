@@ -45,7 +45,7 @@
                     </li>
                 @else
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('read',['path'=>'laravel','fileName'=>'artisan']) }}">Dashboard</a>
+                        <a class="nav-link" href="{{ route('read',['path'=>'laravel','fileName'=>'artisan']) }}">Laravel</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
