@@ -15,7 +15,6 @@
     .sidebar {
         flex-basis: 20%; /* عرض اولیه ۲۰٪ */
         flex-shrink: 0; /* اجازه نده کوچک شود */
-        height: 100vh;
         background-color: #212529;
         transition: transform 0.3s ease;
         z-index: 1000;
