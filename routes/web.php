@@ -30,7 +30,9 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
 });
 
-Route::get('test',[LogReadController::class, 'chart']);
+Route::get('chart',[LogReadController::class, 'chart']);
+
+
 
 // Authenticated routes
 Route::middleware('auth')->group(function () {
@@ -38,6 +40,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+    Route::get('/timer',[LogReadController::class, 'timer']);
+    Route::get('/worker',[LogReadController::class, 'worker']);
+    Route::post('/log-read/start',[LogReadController::class, 'start']);
+    Route::post('/log-read/start_worker',[LogReadController::class, 'startWorker']);
+    Route::post('/log-read/end',[LogReadController::class, 'end']);
+    Route::post('/log-read/end',[LogReadController::class, 'endWorker']);
 });
 
 Route::post('api/cards/{path}', [StudyController::class, 'study'])->name('cards.study')->withoutMiddleware(VerifyCsrfToken::class);

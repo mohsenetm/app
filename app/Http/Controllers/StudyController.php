@@ -99,7 +99,7 @@ class StudyController extends Controller
                 'user_id' => auth()->id(),
                 'is_main' => true,
                 'name' => $request->name,
-                'time' => 1,
+                'time' => 0,
                 'day' => Carbon::now()->format('Y-m-d'),
             ]);
 
@@ -114,7 +114,7 @@ class StudyController extends Controller
             'user_id' => 1,
             'is_main' => false,
             'name' => $request->name,
-            'time' => 1
+            'time' => 0
         ]);
 
         return response()->json([

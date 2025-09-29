@@ -15,7 +15,8 @@ class LogRead extends Model
         'name',
         'is_main',
         'time',
-        'day'
+        'day',
+        'created_at',
     ];
 
     public function user(): BelongsTo
