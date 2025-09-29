@@ -3,6 +3,8 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LogReadController;
 use App\Http\Controllers\MarkdownDirectoryController;
+use App\Http\Controllers\StudyController;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
@@ -33,3 +35,9 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard');
 });
+
+Route::post('api/cards/{path}', [StudyController::class, 'study'])->name('cards.study')->withoutMiddleware(VerifyCsrfToken::class);
+
+Route::post('api/file/{path}/{fileName}', [StudyController::class, 'read'])->name('cards.read')->withoutMiddleware(VerifyCsrfToken::class);
+
+Route::post('api/track-card', [StudyController::class, 'track'])->withoutMiddleware(VerifyCsrfToken::class);

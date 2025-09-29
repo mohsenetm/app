@@ -95,7 +95,7 @@ class StudyController extends Controller
 
         if (!$logRead) {
             LogRead::query()->create([
-                'user_id' => 1,
+                'user_id' => auth()->id(),
                 'is_main' => true,
                 'name' => $request->name,
                 'time' => 1
