@@ -92,7 +92,7 @@ class MarkdownDirectoryController extends Controller
                 $card->update([
                     'content_md5' => $section['content_md5'],
                     'front' => $section['front'] ?? $section['content'],
-                    'back' => $section['front'],
+                    'back' => '-',
                 ]);
                 $updateCards[] = $card;
             }
