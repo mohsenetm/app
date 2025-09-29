@@ -166,7 +166,7 @@
                 @foreach($files as $file)
                     @php
                         $fileClearName = $file->getFileName();
-                        $fileClearName = str_replace('.md','',$fileClearName)
+                        $fileClearName = ucfirst(str_replace('.md','',$fileClearName))
                     @endphp
                     <li class="nav-item">
                         <a class="nav-link"
