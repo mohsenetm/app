@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="mb-4">Log Reads</h1>
+        <h1 class="mb-4">History</h1>
         <table class="table table-striped">
             <thead>
                 <tr>

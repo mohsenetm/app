@@ -27,8 +27,6 @@ class LogReadController extends Controller
             }
         }
 
-//        dd($files);
-
         return view('read', compact('path', 'fileName', 'files'));
     }
 }

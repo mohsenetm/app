@@ -165,14 +165,14 @@
             <ul class="nav nav-pills flex-column flex-grow-1">
                 @foreach($files as $file)
                     @php
-                        $fileName = $file->getFileName();
-                        $fileName = str_replace('.md','',$fileName)
+                        $fileClearName = $file->getFileName();
+                        $fileClearName = str_replace('.md','',$fileClearName)
                     @endphp
                     <li class="nav-item">
                         <a class="nav-link"
-                           href="{{ route('read',['path'=>$path,'fileName'=>$fileName]) }}">
+                           href="{{ route('read',['path'=>$path,'fileName'=>$fileClearName]) }}">
                             <i class="bi bi-speedometer2"></i>
-                            {{$fileName}}
+                            {{$fileClearName}}
                         </a>
                     </li>
                 @endforeach
