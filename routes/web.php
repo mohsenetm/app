@@ -5,17 +5,17 @@ use App\Http\Controllers\LogReadController;
 use App\Http\Controllers\MarkdownDirectoryController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/scan/{path}', [MarkdownDirectoryController::class, 'scanMarkdownDirectory']);
+Route::middleware('auth')->group(function () {
+    Route::get('/scan/{path}', [MarkdownDirectoryController::class, 'scanMarkdownDirectory']);
 
-Route::get('/cards/{path}', function (string $path) {
-    return view('card', compact('path'));
+    Route::get('/cards/{path}', function (string $path) {
+        return view('card', compact('path'));
+    });
+
+    Route::get('/read/{path}/{fileName}', [LogReadController::class, 'read'])->name('read');
+
+    Route::get('/history', [LogReadController::class, 'index'])->name('history');
 });
-
-Route::get('/read/{path}/{fileName}', function (string $path, string $fileName) {
-    return view('read', compact('path', 'fileName'));
-});
-
-Route::get('/log-reads', [LogReadController::class, 'index']);
 
 
 Route::middleware('guest')->group(function () {

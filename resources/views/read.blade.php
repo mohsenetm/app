@@ -13,14 +13,20 @@
 <style>
     /* Sidebar Styles */
     .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
+        flex-basis: 20%;   /* عرض اولیه ۲۰٪ */
+        flex-shrink: 0;    /* اجازه نده کوچک شود */
         height: 100vh;
-        width: 250px;
         background-color: #212529;
         transition: transform 0.3s ease;
         z-index: 1000;
+    }
+
+    .sidebar-flex {
+        flex-basis: 20%;   /* عرض اولیه ۲۰٪ */
+        flex-shrink: 0;    /* اجازه نده کوچک شود */
+        background-color: #212529;
+        color: white;
+        padding: 20px;
     }
 
     .sidebar.collapsed {
@@ -95,7 +101,7 @@
         padding: 2rem;
         background: white;
         border-radius: 10px;
-        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     }
 
     .form-control:focus {
@@ -118,6 +124,7 @@
         display: flex;
         flex-direction: row;
         min-height: 100vh;
+        padding: 0px;
     }
 
     .sidebar {
@@ -131,7 +138,7 @@
 
     #markdown-container {
         flex-grow: 1;
-        margin-right: 0;
+        padding-top: 20px;
         transition: margin-right 0.3s ease;
     }
 
@@ -140,63 +147,35 @@
     }
 </style>
 <div class="content">
-    <nav class="sidebar" id="sidebar">
+    <nav class="sidebar" id="sidebar" dir="auto">
         <div class="d-flex flex-column h-100">
             <!-- Brand -->
             <div class="p-3 border-bottom border-secondary">
-                <h5 class="text-white mb-0">Laravel App</h5>
+                <h5 class="text-white mb-0">{{$path}}</h5>
             </div>
 
             <!-- Navigation Menu -->
             <ul class="nav nav-pills flex-column flex-grow-1">
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
-                       href="{{ route('dashboard') }}">
-                        <i class="bi bi-speedometer2"></i>
-                        Dashboard
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('profile.*') ? 'active' : '' }}"
-                       href="#profile">
-                        <i class="bi bi-person"></i>
-                        Profile
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}"
-                       href="#users">
-                        <i class="bi bi-people"></i>
-                        Users
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('settings.*') ? 'active' : '' }}"
-                       href="#settings">
-                        <i class="bi bi-gear"></i>
-                        Settings
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}"
-                       href="#reports">
-                        <i class="bi bi-bar-chart"></i>
-                        Reports
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('messages.*') ? 'active' : '' }}"
-                       href="#messages">
-                        <i class="bi bi-envelope"></i>
-                        Messages
-                        <span class="badge bg-danger ms-auto">3</span>
-                    </a>
-                </li>
+                @foreach($files as $file)
+                    @php
+                        $fileName = $file->getFileName();
+                        $fileName = str_replace('.md','',$fileName)
+                    @endphp
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="{{ route('read',['path'=>$path,'fileName'=>$fileName]) }}">
+                            <i class="bi bi-speedometer2"></i>
+                            {{$fileName}}
+                        </a>
+                    </li>
+                @endforeach
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="{{ route('history') }}">
+                            <i class="bi bi-speedometer2"></i>
+                            History
+                        </a>
+                    </li>
             </ul>
 
             <!-- User Info & Logout -->
@@ -208,7 +187,6 @@
                     </div>
                     <div class="flex-grow-1">
                         <div class="fw-semibold">{{ Auth::user()->name }}</div>
-                        <small class="text-muted">{{ Auth::user()->email }}</small>
                     </div>
                 </div>
 
@@ -233,12 +211,12 @@
 <script src="{{url('lib/bootstrap.bundle.min.js')}}"></script>
 <script src="{{url('lib/read.js')}}"></script>
 <script>
-function toggleSidebar() {
-    const sidebar = document.querySelector('.sidebar');
-    const container = document.getElementById('markdown-container');
-    sidebar.classList.toggle('collapsed');
-    container.classList.toggle('expanded');
-}
+    function toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        const container = document.getElementById('markdown-container');
+        sidebar.classList.toggle('collapsed');
+        container.classList.toggle('expanded');
+    }
 </script>
 </body>
 </html>
