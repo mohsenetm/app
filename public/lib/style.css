@@ -11,6 +11,12 @@ body {
     background: white;
 }
 
+.content-dark {
+    padding: 40px;
+    min-height: calc(100vh - 120px);
+    background-color: #212529;
+}
+
 .loading {
     text-align: center;
     padding: 80px 20px;

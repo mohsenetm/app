@@ -13,8 +13,8 @@
 <style>
     /* Sidebar Styles */
     .sidebar {
-        flex-basis: 20%;   /* عرض اولیه ۲۰٪ */
-        flex-shrink: 0;    /* اجازه نده کوچک شود */
+        flex-basis: 20%; /* عرض اولیه ۲۰٪ */
+        flex-shrink: 0; /* اجازه نده کوچک شود */
         height: 100vh;
         background-color: #212529;
         transition: transform 0.3s ease;
@@ -22,8 +22,8 @@
     }
 
     .sidebar-flex {
-        flex-basis: 20%;   /* عرض اولیه ۲۰٪ */
-        flex-shrink: 0;    /* اجازه نده کوچک شود */
+        flex-basis: 20%; /* عرض اولیه ۲۰٪ */
+        flex-shrink: 0; /* اجازه نده کوچک شود */
         background-color: #212529;
         color: white;
         padding: 20px;
@@ -140,18 +140,26 @@
         flex-grow: 1;
         padding-top: 20px;
         transition: margin-right 0.3s ease;
+        color: white;
     }
 
     #markdown-container.expanded {
         margin-right: 0;
     }
 </style>
-<div class="content">
+<div id="content" class="content">
     <nav class="sidebar" id="sidebar" dir="auto">
         <div class="d-flex flex-column h-100">
             <!-- Brand -->
             <div class="p-3 border-bottom border-secondary">
-                <h5 class="text-white mb-0">{{$path}}</h5>
+                <div class="d-flex">
+
+                    <h5 class="text-white mb-0">{{$path}}</h5>
+                    <button id="darkModeToggle" class="btn btn-outline-secondary" onclick="toggleDarkMode()"
+                            style="margin-left: auto">
+                        <i class="bi bi-moon-fill"></i> Dark Mode
+                    </button>
+                </div>
             </div>
 
             <!-- Navigation Menu -->
@@ -169,13 +177,13 @@
                         </a>
                     </li>
                 @endforeach
-                    <li class="nav-item">
-                        <a class="nav-link"
-                           href="{{ route('history') }}">
-                            <i class="bi bi-speedometer2"></i>
-                            History
-                        </a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="{{ route('history') }}">
+                        <i class="bi bi-speedometer2"></i>
+                        History
+                    </a>
+                </li>
             </ul>
 
             <!-- User Info & Logout -->
@@ -216,6 +224,31 @@
         const container = document.getElementById('markdown-container');
         sidebar.classList.toggle('collapsed');
         container.classList.toggle('expanded');
+    }
+
+    function toggleDarkMode() {
+        const container = document.getElementById('content');
+        const button = document.getElementById('darkModeToggle');
+        const markdownContent = container.querySelector('.markdown-content');
+
+        container.classList.toggle('bg-dark');
+        container.classList.toggle('text-white');
+
+        if (markdownContent) {
+            markdownContent.classList.toggle('bg-dark');
+            markdownContent.classList.toggle('text-white');
+        }
+
+        // Update button appearance
+        if (container.classList.contains('bg-dark')) {
+            button.innerHTML = '<i class="bi bi-sun-fill"></i> Light Mode';
+            button.classList.remove('btn-outline-secondary');
+            button.classList.add('btn-outline-light');
+        } else {
+            button.innerHTML = '<i class="bi bi-moon-fill"></i> Dark Mode';
+            button.classList.remove('btn-outline-light');
+            button.classList.add('btn-outline-secondary');
+        }
     }
 </script>
 </body>
