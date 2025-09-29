@@ -32,7 +32,7 @@ class MarkdownDirectoryController extends Controller
 
         if (!$deck) {
             $deck = Deck::query()->create([
-                'user_id' => 1,
+                'user_id' => auth()->id(),
                 'name' => $path,
                 'description' => '-',
                 'new_cards_per_day' => 20,
@@ -99,7 +99,7 @@ class MarkdownDirectoryController extends Controller
 
             if (!$card) {
                 $newCards[] = Card::query()->create([
-                    'user_id' => 1,
+                    'user_id' => auth()->id(),
                     'identifier' => $section['identifier'],
                     'content_md5' => $section['content_md5'],
                     'deck_id' => $deck->id,

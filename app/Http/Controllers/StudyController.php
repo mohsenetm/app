@@ -17,9 +17,10 @@ class StudyController extends Controller
 {
     public function study(StudyRequest $request, string $path): JsonResponse
     {
-        auth()->loginUsingId(1);
-
-        $deck = Deck::query()->where('name', $path)->first();
+        $deck = Deck::query()
+            ->where('name', $path)
+            ->where('user_id', auth()->id())
+            ->first();
 
         if (!$deck) {
             return response()->json([

@@ -15,7 +15,7 @@ class LogReadFileController extends Controller
             'file_name' => 'required|string',
         ]);
 
-        $logReadFile = LogRead::create([
+        $logReadFile = LogRead::query()->create([
             'user_id' => $request->user()->id,
             'file_path' => $validated['file_path'],
             'file_name' => $validated['file_name'],
@@ -27,7 +27,7 @@ class LogReadFileController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $logs = LogRead::where('user_id', $request->user()->id)
+        $logs = LogRead::query()->where('user_id', $request->user()->id)
             ->orderBy('read_at', 'desc')
             ->get();
 
