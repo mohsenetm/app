@@ -119,7 +119,7 @@ class MarkdownViewer {
                 this.sendCardId(); // Send immediately when page becomes visible
                 this.intervalId = setInterval(() => {
                     this.sendCardId();
-                }, 10000);
+                }, 60000);
             }
         };
 
@@ -131,7 +131,7 @@ class MarkdownViewer {
             this.sendCardId();
             this.intervalId = setInterval(() => {
                 this.sendCardId();
-            }, 10000);
+            }, 60000);
         }
     }
 
