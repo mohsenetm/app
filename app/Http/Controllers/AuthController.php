@@ -44,6 +44,12 @@ class AuthController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
+        $user = User::query()->find(1);
+
+        if ($user !== null) {
+            dd(' Sorry. This Project Is Mvp. And Just Single User.');
+        }
+
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],

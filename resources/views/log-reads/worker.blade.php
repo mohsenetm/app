@@ -42,7 +42,7 @@
             errorDiv.classList.add('hidden');
 
             startBtn.addEventListener('click', function() {
-                fetch('/log-read/work-start', {
+                fetch('/log-read/start_worker', {
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -77,7 +77,7 @@
             });
 
             endBtn.addEventListener('click', function() {
-                fetch('/log-read/work-end', {
+                fetch('/log-read/end-worker', {
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,

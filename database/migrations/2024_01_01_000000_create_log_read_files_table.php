@@ -14,6 +14,8 @@ return new class extends Migration {
             $table->string('name');
             $table->unsignedInteger('time');
             $table->date('day')->index();
+            $table->timestamp('start')->nullable();
+            $table->timestamp('end')->nullable();
             $table->timestamps();
         });
     }

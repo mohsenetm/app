@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\LogRead;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -31,23 +32,28 @@ class LogReadController extends Controller
         return view('read', compact('path', 'fileName', 'files'));
     }
 
-    public function chart()
+    public function chart(string $type)
     {
-        $contributionData = $this->generateContributionData();
+        $contributionData = $this->generateContributionData($type);
         $stats = $this->calculateStats($contributionData);
         $weeks = $this->groupByWeeks($contributionData);
 
         return view('log-reads.chart', compact('contributionData', 'stats', 'weeks'));
     }
 
-    public function generateContributionData()
+    public function generateContributionData($type)
     {
         $data = [];
         $oneYearAgo = Carbon::now()->subYear();
         $now = now();
 
         while ($oneYearAgo->timestamp <= $now->timestamp) {
-            $minutes = LogRead::query()->where('day', $oneYearAgo->format('Y-m-d'))->count();
+            $minutes = LogRead::query()->where('day', $oneYearAgo->format('Y-m-d'))
+                ->when($type === 'work', function ($query) {
+                    $query->where('name', 'working!!');
+                })->when($type === 'read', function ($query) {
+                    $query->where('name', '!=', 'working!!');
+                })->count();
             $level = 0;
             if ($minutes > 0) $level = 1;
             if ($minutes > 25) $level = 2;
@@ -127,47 +133,64 @@ class LogReadController extends Controller
 
     private function startTimer(string $logName)
     {
-        $log = LogRead::query()
-            ->where('name', $logName)
-            ->where('user_id', auth()->id())
-            ->first();
+        $existingLog = $this->findActiveLog($logName);
 
-        if($log !== null) {
-            return response()->json([
-                'success' => true,
-                'timestamp' => $log->created_at->format('Y-m-d H:i:s')
-            ]);
+        if ($existingLog) {
+            return $this->buildTimerResponse($existingLog);
         }
 
-        $log = LogRead::query()->create([
+        $newLog = $this->createNewLog($logName);
+
+        return $this->buildTimerResponse($newLog);
+    }
+
+    private function findActiveLog(string $logName)
+    {
+        return LogRead::query()
+            ->where('name', $logName)
+            ->where('user_id', auth()->id())
+            ->whereNotNull('start')
+            ->whereNull('end')
+            ->first();
+    }
+
+    private function createNewLog(string $logName)
+    {
+        return LogRead::query()->create([
             'user_id' => auth()->id(),
             'is_main' => true,
             'name' => $logName,
             'time' => 0,
-            'day' => \Illuminate\Support\Carbon::now()->format('Y-m-d'),
+            'day' => now()->format('Y-m-d'),
+            'start' => now()->format('Y-m-d H:i:s'),
         ]);
+    }
 
+    private function buildTimerResponse($log)
+    {
         return response()->json([
             'success' => true,
-            'timestamp' => $log->created_at->format('Y-m-d H:i:s')
+            'timestamp' => Carbon::parse($log->start)->format('Y-m-d H:i:s'),
         ]);
     }
 
     public function start()
     {
-        return $this->startTimer('start!!start');
+        return $this->startTimer('reading!!');
     }
 
     public function startWorker()
     {
-        return $this->startTimer('start_work!!start_work');
+        return $this->startTimer('working!!');
     }
 
-    private function endTimer(string $startLogName, string $betweenLogName, string $endLogName)
+    private function endTimer(string $startLogName)
     {
         $log = LogRead::query()
             ->where('name', $startLogName)
             ->where('user_id', auth()->id())
+            ->whereNotNull('start')
+            ->whereNull('end')
             ->first();
 
         if ($log === null) {
@@ -184,34 +207,40 @@ class LogReadController extends Controller
             $endLog = LogRead::query()->create([
                 'user_id' => auth()->id(),
                 'is_main' => false,
-                'name' => $betweenLogName,
+                'name' => $startLogName,
                 'time' => 0,
                 'day' => \Illuminate\Support\Carbon::now()->format('Y-m-d'),
-                'created_at' => $log->created_at->addMinute()->format('Y-m-d H:i:s'),
             ]);
 
             $log->time += 1;
             $log->save();
         }
 
-        $log->name = $endLogName;
+        if (!isset($endLog)) {
+            return response()->json([
+                'success' => false,
+                'error' => 'No Elapsed One Minutes'
+            ], 400);
+        }
+
+        $log->end = now()->format('Y-m-d H:i:s');
         $log->save();
 
         return response()->json([
             'success' => true,
-            'start' => ['id' => $log->id, 'start' => $log->created_at->format('Y-m-d H:i:s'), 'time' => $log->time],
-            'end' => ['id' => $endLog->id, 'end' => $endLog->created_at->format('Y-m-d H:i:s')],
+            'start' => ['id' => $log->id, 'start' => Carbon::parse($log->start)->format('Y-m-d H:i:s'), 'time' => $log->time],
+            'end' => ['id' => $endLog->id, 'end' => Carbon::parse($log->end)->format('Y-m-d H:i:s')],
         ]);
     }
 
-    public function end()
+    public function end(): JsonResponse
     {
-        return $this->endTimer('start!!start', 'between!!between', 'start!!end');
+        return $this->endTimer('reading!!');
     }
 
-    public function endWorker()
+    public function endWorker(): JsonResponse
     {
-        return $this->endTimer('start_work!!start_work', 'between_work!!between_work', 'start_work!!end_work');
+        return $this->endTimer('working!!');
     }
 
 
