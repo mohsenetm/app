@@ -60,16 +60,25 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
+                        startTime = new Date();
                         resultDiv.innerHTML = `
                             <div class="text-green-600">
                                 <p class="font-semibold">Reading session started!</p>
                                 <p class="text-sm mt-1">Started at: ${data.timestamp}</p>
+                                 <p class="mt-2"><strong>Time since completion:</strong> <span id="elapsedTime">0</span> seconds</p>
                             </div>
                         `;
                         resultDiv.classList.remove('hidden');
                         errorDiv.classList.add('hidden');
                         startBtn.disabled = true;
                         endBtn.disabled = false;
+
+                        // Start timer to show elapsed time
+                        timerInterval = setInterval(() => {
+                            const now = new Date();
+                            const elapsed = Math.floor((now - startTime) / 1000);
+                            document.getElementById('elapsedTime').textContent = elapsed;
+                        }, 1000);
                     } else {
                         errorDiv.innerHTML = `<p>Error: ${data.error}</p>`;
                         errorDiv.classList.remove('hidden');
@@ -95,27 +104,19 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        startTime = new Date();
                         resultDiv.innerHTML = `
                             <div class="text-green-600">
                                 <p class="font-semibold">Reading session completed!</p>
                                 <p class="mt-2"><strong>Start:</strong> ${data.start.start}</p>
                                 <p><strong>End:</strong> ${data.end.end}</p>
                                 <p class="mt-2"><strong>Total reading time:</strong> ${data.start.time} minutes</p>
-                                <p class="mt-2"><strong>Time since completion:</strong> <span id="elapsedTime">0</span> seconds</p>
+
                             </div>
                         `;
                         resultDiv.classList.remove('hidden');
                         errorDiv.classList.add('hidden');
                         startBtn.disabled = false;
                         endBtn.disabled = true;
-                        
-                        // Start timer to show elapsed time
-                        timerInterval = setInterval(() => {
-                            const now = new Date();
-                            const elapsed = Math.floor((now - startTime) / 1000);
-                            document.getElementById('elapsedTime').textContent = elapsed;
-                        }, 1000);
                     } else {
                         errorDiv.innerHTML = `<p>Error: ${data.error}</p>`;
                         errorDiv.classList.remove('hidden');
