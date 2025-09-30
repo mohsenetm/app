@@ -60,7 +60,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        startTime = new Date();
+                        startTime = new Date(data.timestamp);
                         resultDiv.innerHTML = `
                             <div class="text-green-600">
                                 <p class="font-semibold">Reading session started!</p>
