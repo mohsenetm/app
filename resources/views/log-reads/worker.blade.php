@@ -36,12 +36,18 @@
             const endBtn = document.getElementById('endBtn');
             const resultDiv = document.getElementById('result');
             const errorDiv = document.getElementById('error');
+            let startTime = null;
+            let timerInterval = null;
 
             // Hide result and error divs initially
             resultDiv.classList.add('hidden');
             errorDiv.classList.add('hidden');
 
             startBtn.addEventListener('click', function() {
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                }
                 fetch('/log-read/start_worker', {
                     method: 'POST',
                     headers: {
@@ -53,16 +59,24 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
+                        startTime = new Date(data.timestamp);
                         resultDiv.innerHTML = `
                             <div class="text-green-600">
                                 <p class="font-semibold">Reading session started!</p>
                                 <p class="text-sm mt-1">Started at: ${data.timestamp}</p>
+                                <p class="mt-2"><strong>Time since completion:</strong> <span id="elapsedTime">0</span> minutes</p>
                             </div>
                         `;
                         resultDiv.classList.remove('hidden');
                         errorDiv.classList.add('hidden');
                         startBtn.disabled = true;
                         endBtn.disabled = false;
+
+                        timerInterval = setInterval(() => {
+                            const now = new Date();
+                            const elapsed = Math.floor((now - startTime) / 60000);
+                            document.getElementById('elapsedTime').textContent = elapsed;
+                        }, 5000);
                     } else {
                         errorDiv.innerHTML = `<p>Error: ${data.error}</p>`;
                         errorDiv.classList.remove('hidden');

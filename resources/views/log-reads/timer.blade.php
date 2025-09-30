@@ -44,7 +44,6 @@
             errorDiv.classList.add('hidden');
 
             startBtn.addEventListener('click', function() {
-                // Clear any existing timer
                 if (timerInterval) {
                     clearInterval(timerInterval);
                     timerInterval = null;
@@ -78,7 +77,7 @@
                             const now = new Date();
                             const elapsed = Math.floor((now - startTime) / 60000);
                             document.getElementById('elapsedTime').textContent = elapsed;
-                        }, 30000);
+                        }, 5000);
                     } else {
                         errorDiv.innerHTML = `<p>Error: ${data.error}</p>`;
                         errorDiv.classList.remove('hidden');
