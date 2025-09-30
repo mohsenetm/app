@@ -65,7 +65,7 @@
                             <div class="text-green-600">
                                 <p class="font-semibold">Reading session started!</p>
                                 <p class="text-sm mt-1">Started at: ${data.timestamp}</p>
-                                 <p class="mt-2"><strong>Time since completion:</strong> <span id="elapsedTime">0</span> seconds</p>
+                                 <p class="mt-2"><strong>Time since completion:</strong> <span id="elapsedTime">0</span> minutes</p>
                             </div>
                         `;
                         resultDiv.classList.remove('hidden');
@@ -76,9 +76,9 @@
                         // Start timer to show elapsed time
                         timerInterval = setInterval(() => {
                             const now = new Date();
-                            const elapsed = Math.floor((now - startTime) / 1000);
+                            const elapsed = Math.floor((now - startTime) / 60000);
                             document.getElementById('elapsedTime').textContent = elapsed;
-                        }, 1000);
+                        }, 30000);
                     } else {
                         errorDiv.innerHTML = `<p>Error: ${data.error}</p>`;
                         errorDiv.classList.remove('hidden');
