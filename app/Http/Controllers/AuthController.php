@@ -36,6 +36,7 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
+
     public function register(Request $request)
     {
         $validated = $request->validate([
@@ -44,10 +45,8 @@ class AuthController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
-        $user = User::query()->find(1);
-
-        if ($user !== null) {
-            dd(' Sorry. This Project Is Mvp. And Just Single User.');
+        if (User::exists()) {
+            abort(403, 'Sorry. This Project Is Mvp. And Just Single User.');
         }
 
         $user = User::create([
