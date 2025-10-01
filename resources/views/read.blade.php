@@ -165,11 +165,12 @@
             <ul class="nav nav-pills flex-column flex-grow-1">
                 @foreach($files as $file)
                     @php
+                        $newFileName = str_replace('.md','',$file->getFileName());
                         $fileClearName = $file->getFileName();
                         $fileClearName = str_replace('.md','',$fileClearName)
                     @endphp
                     <li class="nav-item">
-                        <a class="nav-link"
+                        <a class="nav-link  {{$newFileName == $fileName ? 'bg-white':null}}"
                            href="{{ route('read',['path'=>$path,'fileName'=>$fileClearName]) }}">
                             <i class="bi bi-speedometer2"></i>
                             {{ucfirst($fileClearName)}}
@@ -207,8 +208,9 @@
             </div>
         </div>
     </nav>
-    <div id="markdown-container" class="container"
+    <div id="markdown-container" class="container" style="font-size:32px"
          data-api-url="{{ route('cards.read',['path'=>$path,'fileName'=>$fileName]) }}">
+
         <div class="loading">در حال دریافت محتوا از سرور...</div>
     </div>
 </div>
