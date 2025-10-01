@@ -89,32 +89,12 @@ class StudyController extends Controller
 
     public function track(Request $request): JsonResponse
     {
-        $logRead = LogRead::query()->where([
-            'name' => $request->name,
-            'is_main' => true
-        ])->first();
-
-        if (!$logRead) {
-            LogRead::query()->create([
-                'user_id' => auth()->id(),
-                'is_main' => true,
-                'name' => $request->name,
-                'time' => 0,
-                'day' => Carbon::now()->format('Y-m-d'),
-            ]);
-
-            return response()->json([
-                'success' => true,
-            ]);
-        }
-
-        $logRead->update(['time' => $logRead->time + 1]);
-
         LogRead::query()->create([
-            'user_id' => 1,
+            'user_id' => auth()->id(),
             'is_main' => false,
             'name' => $request->name,
-            'time' => 0
+            'time' => 0,
+            'day' => Carbon::now()->format('Y-m-d'),
         ]);
 
         return response()->json([

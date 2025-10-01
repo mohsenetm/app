@@ -53,7 +53,7 @@ class LogReadController extends Controller
                     $query->where('name', 'working!!');
                 })->when($type === 'read', function ($query) {
                     $query->where('name', '!=', 'working!!');
-                })->count();
+                })->sum('time');
             $level = 0;
             if ($minutes > 0) $level = 1;
             if ($minutes > 25) $level = 2;
@@ -200,36 +200,17 @@ class LogReadController extends Controller
             ], 400);
         }
 
-        $start = (int)($log->created_at->timestamp / 60);
-        $end = (int)(Carbon::now()->format('U') / 60);
+        $start = Carbon::parse($log->start);
+        $end = now();
 
-        for ($i = $start; $i < $end; $i++) {
-            $endLog = LogRead::query()->create([
-                'user_id' => auth()->id(),
-                'is_main' => false,
-                'name' => $startLogName,
-                'time' => 0,
-                'day' => \Illuminate\Support\Carbon::now()->format('Y-m-d'),
-            ]);
-
-            $log->time += 1;
-            $log->save();
-        }
-
-        if (!isset($endLog)) {
-            return response()->json([
-                'success' => false,
-                'error' => 'No Elapsed One Minutes'
-            ], 400);
-        }
-
-        $log->end = now()->format('Y-m-d H:i:s');
+        $log->end = $end->format('Y-m-d H:i:s');
+        $log->time = (int)$start->diffInMinutes($end);
         $log->save();
 
         return response()->json([
             'success' => true,
             'start' => ['id' => $log->id, 'start' => Carbon::parse($log->start)->format('Y-m-d H:i:s'), 'time' => $log->time],
-            'end' => ['id' => $endLog->id, 'end' => Carbon::parse($log->end)->format('Y-m-d H:i:s')],
+            'end' => ['id' => $log->id, 'end' => Carbon::parse($log->end)->format('Y-m-d H:i:s')],
         ]);
     }
 
