@@ -226,17 +226,19 @@
             gfm: true
         });
 
-        // Function to detect Persian characters
-        function hasPersian(text) {
+        // Function to detect Persian characters by first character
+        function hasPersianFirstChar(text) {
+            if (!text || text.trim() === '') return false;
+            const firstChar = text.trim().charAt(0);
             const persianRegex = /[\u0600-\u06FF]/;
-            return persianRegex.test(text);
+            return persianRegex.test(firstChar);
         }
 
         // Function to set RTL direction for lines with Persian characters
         function setDirectionForPersianLines(element) {
             const lines = element.innerHTML.split('\n');
             const processedLines = lines.map(line => {
-                if (hasPersian(line)) {
+                if (hasPersianFirstChar(line)) {
                     return `<div style="direction: rtl; text-align: right;">${line}</div>`;
                 }
             });
