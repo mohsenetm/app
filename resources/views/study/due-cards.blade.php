@@ -240,6 +240,8 @@
             const processedLines = lines.map(line => {
                 if (hasPersianFirstChar(line)) {
                     return `<div style="direction: rtl; text-align: right;">${line}</div>`;
+                } else {
+                    return `${line}`;
                 }
             });
             element.innerHTML = processedLines.join('');
