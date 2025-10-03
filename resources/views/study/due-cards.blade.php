@@ -239,7 +239,6 @@
                 if (hasPersian(line)) {
                     return `<div style="direction: rtl; text-align: right;">${line}</div>`;
                 }
-                return `<div style="direction: ltr; text-align: left;">${line}</div>`;
             });
             element.innerHTML = processedLines.join('');
         }
@@ -248,7 +247,7 @@
         document.querySelectorAll('.markdown-content').forEach(function(element) {
             const markdown = element.textContent;
             element.innerHTML = marked.parse(markdown);
-            
+
             // Apply RTL direction for Persian content
             setDirectionForPersianLines(element);
         });
