@@ -14,31 +14,31 @@ class DeckSeeder extends Seeder
 
         $decks = [
             [
-                'name' => 'زبان انگلیسی - مبتدی',
+                'name' => 'a',
                 'description' => 'واژگان پایه و اساسی زبان انگلیسی',
                 'new_cards_per_day' => 20,
                 'review_cards_per_day' => 100,
             ],
             [
-                'name' => 'زبان انگلیسی - پیشرفته',
+                'name' => 'b',
                 'description' => 'واژگان پیشرفته و اصطلاحات تخصصی',
                 'new_cards_per_day' => 15,
                 'review_cards_per_day' => 80,
             ],
             [
-                'name' => 'برنامه‌نویسی PHP',
+                'name' => 'c',
                 'description' => 'مفاهیم و توابع PHP و Laravel',
                 'new_cards_per_day' => 10,
                 'review_cards_per_day' => 50,
             ],
             [
-                'name' => 'پایگاه داده',
+                'name' => 'd',
                 'description' => 'مفاهیم SQL و طراحی پایگاه داده',
                 'new_cards_per_day' => 10,
                 'review_cards_per_day' => 50,
             ],
             [
-                'name' => 'تاریخ ایران',
+                'name' => 'e',
                 'description' => 'وقایع مهم تاریخ ایران',
                 'new_cards_per_day' => 15,
                 'review_cards_per_day' => 60,

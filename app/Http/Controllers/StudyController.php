@@ -191,6 +191,101 @@ class StudyController extends Controller
             ->first();
     }
 
+    public function getDueCards(Request $request): \Illuminate\View\View
+    {
+        $deck = null;
+        $path = $request->input('path');
+        if ($path) {
+            $deck = Deck::query()
+                ->first();
+        }
+
+        $dueDate = $request->input('due_date') ? Carbon::parse($request->input('due_date')) : now();
+        $userId = auth()->id();
+
+        $relearningCards = $deck ? $this->getAllRelearningCards($deck, $userId, $dueDate) : collect();
+        $learningCards = $deck ? $this->getAllLearningCards($deck, $userId, $dueDate) : collect();
+        $reviewCards = $deck ? $this->getAllReviewCards($deck, $userId, $dueDate) : collect();
+        $newCards = $deck ? $this->getAllNewCards($deck, $userId) : collect();
+
+        return view('study.due-cards', [
+            'deck' => $deck,
+            'path' => $path,
+            'time' => $dueDate->format('Y-m-d H:i:s'),
+            'relearningCards' => $relearningCards,
+            'learningCards' => $learningCards,
+            'reviewCards' => $reviewCards,
+            'newCards' => $newCards,
+        ]);
+    }
+
+    private function getAllRelearningCards(Deck $deck, int $userId, $dueDate = null): \Illuminate\Support\Collection
+    {
+        $dueDate = $dueDate ?? now();
+        return $deck->cards()
+            ->whereHas('reviews', function ($query) use ($userId, $dueDate) {
+                $query->where('user_id', $userId)
+                    ->where('status', 'relearning')
+                    ->where('due_date', '<=', $dueDate);
+            })
+            ->get();
+    }
+
+    private function getAllLearningCards(Deck $deck, int $userId, $dueDate = null): \Illuminate\Support\Collection
+    {
+        $dueDate = $dueDate ?? now();
+        return $deck->cards()
+            ->whereHas('reviews', function ($query) use ($userId, $dueDate) {
+                $query->where('user_id', $userId)
+                    ->where('status', 'learning')
+                    ->where('due_date', '<=', $dueDate);
+            })
+            ->get();
+    }
+
+    private function getAllReviewCards(Deck $deck, int $userId, $dueDate = null): \Illuminate\Support\Collection
+    {
+        $dueDate = $dueDate ?? now();
+        return $deck->cards()
+            ->whereHas('reviews', function ($query) use ($userId, $dueDate) {
+                $query->where('user_id', $userId)
+                    ->where('status', 'review')
+                    ->where('due_date', '<=', $dueDate)
+                    ->whereDate('last_reviewed_at', '<', today());
+            })
+            ->orderBy('created_at')
+            ->get();
+    }
+
+    private function getAllNewCards(Deck $deck, int $userId): \Illuminate\Support\Collection
+    {
+        $cards = collect();
+
+        if ($this->getTodayNewCount($deck) < $deck->new_cards_per_day) {
+            $newCards = $deck->cards()
+                ->whereDoesntHave('reviews', function ($query) use ($userId) {
+                    $query->where('user_id', $userId);
+                })
+                ->get();
+
+            foreach ($newCards as $card) {
+                $card->getOrCreateReview();
+                $cards->push($card);
+            }
+
+            $statusNewCards = $deck->cards()
+                ->whereHas('reviews', function ($query) use ($userId) {
+                    $query->where('user_id', $userId)
+                        ->where('status', 'new');
+                })
+                ->get();
+
+            $cards = $cards->merge($statusNewCards);
+        }
+
+        return $cards;
+    }
+
     private function getDueCardsCount(Deck $deck): int
     {
         return $deck->cards()

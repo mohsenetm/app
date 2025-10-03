@@ -100,6 +100,20 @@ class CardReview extends Model
         return $this->interval;
     }
 
+    /**
+     * Process a card review and update the review status based on performance
+     * 
+     * Status Transitions:
+     * - NEW: Initial state for cards that haven't been reviewed
+     * - LEARNING: Card transitions from NEW after first successful review (not AGAIN)
+     * - REVIEW: Card graduates to REVIEW after 2+ successful reviews (not AGAIN)
+     * - RELEARNING: Card resets to RELEARNING when rated AGAIN
+     * 
+     * The status calculation considers:
+     * 1. Current status (NEW cards start in learning phase)
+     * 2. Number of successful repetitions (2+ repetitions graduate to REVIEW)
+     * 3. Current rating (AGAIN resets to RELEARNING, others progress forward)
+     */
     public function processReview(Rating $rating): void
     {
         $oldEaseFactor = $this->ease_factor;

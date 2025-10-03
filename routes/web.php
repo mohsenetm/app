@@ -40,16 +40,16 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     // Authentication management
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    
+
     // Dashboard
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-    
+
     // Timer and worker views
     Route::get('/timer', [LogReadController::class, 'timer'])->name('timer');
     Route::get('/worker', [LogReadController::class, 'worker'])->name('worker');
-    
+
     // Log reading tracking routes
     Route::prefix('log-read')->group(function () {
         Route::post('/start', [LogReadController::class, 'start'])->name('log-read.start');
@@ -57,20 +57,21 @@ Route::middleware('auth')->group(function () {
         Route::post('/end', [LogReadController::class, 'end'])->name('log-read.end');
         Route::post('/end-worker', [LogReadController::class, 'endWorker'])->name('log-read.end-worker');
     });
-    
+
     // Charts and analytics
     Route::get('chart/{type}', [LogReadController::class, 'chart'])->name('chart');
-    
+    Route::get('due-cards', [StudyController::class, 'getDueCards'])->name('due-cards');
+
     // Study tracking API (without CSRF for external requests)
     Route::prefix('api')->group(function () {
         Route::post('cards/{path}', [StudyController::class, 'study'])
             ->name('cards.study')
             ->withoutMiddleware(VerifyCsrfToken::class);
-            
+
         Route::post('file/{path}/{fileName}', [StudyController::class, 'read'])
             ->name('cards.read')
             ->withoutMiddleware(VerifyCsrfToken::class);
-            
+
         Route::post('track-card', [StudyController::class, 'track'])
             ->withoutMiddleware(VerifyCsrfToken::class);
     });
