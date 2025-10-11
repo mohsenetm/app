@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LogReadController;
 use App\Http\Controllers\MarkdownDirectoryController;
 use App\Http\Controllers\StudyController;
+use App\Http\Controllers\WordTranslationController;
 use App\Models\LogRead;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Carbon;
@@ -75,6 +76,23 @@ Route::middleware('auth')->group(function () {
         Route::post('track-card', [StudyController::class, 'track'])
             ->withoutMiddleware(VerifyCsrfToken::class);
     });
+});
+
+Route::prefix('words')->group(function () {
+    // ترجمه و ذخیره کلمات
+    Route::get('/translate', [WordTranslationController::class, 'translate']);
+
+    // جستجو
+    Route::get('/search', [WordTranslationController::class, 'search']);
+
+    // لیست کلمات
+    Route::get('/', [WordTranslationController::class, 'index']);
+
+    // دریافت یک کلمه
+    Route::get('/{word}', [WordTranslationController::class, 'show']);
+
+    // حذف کلمه
+    Route::delete('/{word}', [WordTranslationController::class, 'destroy']);
 });
 
 
