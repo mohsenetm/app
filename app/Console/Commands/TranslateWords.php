@@ -2,9 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\TranslateWordsJob;
 use App\Models\Word;
-use App\Repositories\WordRepository;
-use App\Services\OpenRouterService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Console\Command\Command as CommandAlias;
@@ -23,7 +22,7 @@ class TranslateWords extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Reads a JSON file of words, filters existing ones, and dispatches jobs to translate and save them in parallel.';
 
     /**
      * Execute the console command.
@@ -50,47 +49,38 @@ class TranslateWords extends Command
             $model = 'google/gemma-3-12b-it';
 
             if (empty($words)) {
-                $this->warn("No words found in the JSON file.");
+                $this->warn('No words found in the JSON file.');
                 return CommandAlias::SUCCESS;
             }
 
-            $words = collect($words)->filter(function ($word) {
-                return !Word::query()->where('word', $word)->exists();
-            });
+            // Filter out words that are already in the database
+            $existingWords = Word::pluck('word')->toArray();
+            $newWords = array_diff($words, $existingWords);
 
-            // Use Laravel's collection for better data manipulation
-            $wordChunks = $words->chunk(50);
+            if (empty($newWords)) {
+                $this->info('All words from the file are already in the database.');
+                return CommandAlias::SUCCESS;
+            }
+
+            $this->info(count($newWords) . ' new words to process.');
+
+            // Chunk the words to avoid hitting API limits and for parallel processing
+            $wordChunks = collect($newWords)->chunk(50); // Chunk size of 50 is a reasonable default
             $totalChunks = $wordChunks->count();
-            $totalSavedWords = 0;
 
-            $this->info("Processing {$totalChunks} chunks of words...");
+            $this->info("Dispatching {$totalChunks} jobs to the queue...");
 
-            // Create progress bar with Laravel's built-in method
-            $progressBar = $this->output->createProgressBar($totalChunks);
-            $progressBar->start();
-
-            $openRouterService = app(OpenRouterService::class);
-            $wordRepository = app(WordRepository::class);
-
-            $wordChunks->each(function ($chunk, $index) use ($openRouterService, $wordRepository, $model, &$totalSavedWords, $progressBar, $totalChunks) {
-                $yamlResponse = $openRouterService->translateWords($chunk->toArray(), $model);
-                $savedWords = $wordRepository->saveFromYaml($yamlResponse);
-
-                $totalSavedWords += count($savedWords);
-                $chunkNumber = $index + 1;
-
-                $this->line(" Chunk {$chunkNumber}/{$totalChunks} processed - " . $chunk->count() . " words");
-                $progressBar->advance();
+            // Dispatch a job for each chunk
+            $wordChunks->each(function ($chunk) use ($model) {
+                TranslateWordsJob::dispatch($chunk->toArray(), $model);
             });
 
-            $progressBar->finish();
-            $this->newLine();
-            $this->info("Translation completed! Total words saved: {$totalSavedWords}");
+            $this->info('All jobs have been dispatched. Please run `php artisan queue:work` to process them.');
 
             return CommandAlias::SUCCESS;
 
         } catch (\Exception $e) {
-            $this->error("An error occurred: " . $e->getMessage());
+            $this->error('An unexpected error occurred: ' . $e->getMessage());
             return CommandAlias::FAILURE;
         }
     }
