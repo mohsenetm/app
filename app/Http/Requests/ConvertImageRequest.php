@@ -27,9 +27,8 @@ class ConvertImageRequest extends FormRequest
             ],
             'quality' => [
                 'nullable',
-                'integer',
-                'min:1',
-                'max:100'
+                'string',
+                'in:ultra,high,medium,low'
             ]
         ];
     }

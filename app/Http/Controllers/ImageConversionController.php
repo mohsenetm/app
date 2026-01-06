@@ -19,7 +19,25 @@ class ImageConversionController extends Controller
         $startTime = microtime(true);
         $image = $request->file('image');
         $format = $request->input('format') ?? $image->getClientOriginalExtension();
-        $quality = $request->input('quality', 95);
+        $qualityInput = $request->input('quality', 'ultra');
+
+        // Map quality levels to numeric values (different for jpg and webp)
+        $qualityMapJpg = [
+            'ultra' => 32,
+            'high' => 16,
+            'medium' => 8,
+            'low' => 4
+        ];
+
+        $qualityMapWebp = [
+            'ultra' => 30,
+            'high' => 50,
+            'medium' => 70,
+            'low' => 90
+        ];
+
+        $qualityMap = ($format === 'jpg' || $format === 'jpeg') ? $qualityMapJpg : $qualityMapWebp;
+        $quality = $qualityMap[$qualityInput] ?? 32;
 
         $originalSize = $image->getSize();
         $result = $this->convertImageWithFfmpeg($image, $format, $quality);

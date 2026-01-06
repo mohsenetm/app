@@ -269,7 +269,7 @@
         <div class="max-w-5xl mx-auto">
             <div class="mb-8">
                     <span class="glass px-8 py-3 rounded-full text-sm font-semibold text-purple-600 inline-block mb-6 shadow-lg">
-                        🚀 سریع‌ترین ابزار فشرده‌سازی تصویر
+                        🚀 بهترین ابزار فشرده‌سازی تصویر
                     </span>
             </div>
             <h1 class="text-6xl md:text-8xl font-black mb-8 gradient-text leading-tight">
@@ -317,27 +317,22 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-3">فرمت خروجی</label>
-                                <select id="formatSelect" name="format" class="w-full px-4 py-3 rounded-xl border-2 border-gray-300 focus:border-blue-600 focus:outline-none font-semibold transition-all duration-300">
-                                    <option value="">فرمت اصلی</option>
-                                    <option value="jpg">JPG</option>
-                                    <option value="png">PNG</option>
-                                    <option value="webp">WebP</option>
-                                    <option value="avif">AVIF</option>
-                                    <option value="gif">GIF</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-3">کیفیت</label>
-                                <select id="qualitySelect" name="quality" class="w-full px-4 py-3 rounded-xl border-2 border-gray-300 focus:border-blue-600 focus:outline-none font-semibold transition-all duration-300">
-                                    <option value="95" selected>بسیار بالا</option>
-                                    <option value="90">بالا</option>
-                                    <option value="85">متوسط</option>
-                                    <option value="80">پایین</option>
-                                </select>
-                            </div>
+                        <div class="w-full">
+                            <label class="block text-sm font-semibold text-gray-700 mb-3">فرمت خروجی</label>
+                            <select id="formatSelect" name="format" class="w-full px-4 py-3 rounded-xl border-2 border-gray-300 focus:border-blue-600 focus:outline-none font-semibold transition-all duration-300">
+                                <option value="jpg" selected>JPG</option>
+                                <option value="webp">WebP</option>
+                            </select>
+                        </div>
+
+                        <div class="w-full">
+                            <label class="block text-sm font-semibold text-gray-700 mb-3">فشرده سازی</label>
+                            <select id="qualitySelect" name="quality" class="w-full px-4 py-3 rounded-xl border-2 border-gray-300 focus:border-blue-600 focus:outline-none font-semibold transition-all duration-300">
+                                <option value="ultra" selected>حداکثر</option>
+                                <option value="high">بالا</option>
+                                <option value="medium">متوسط</option>
+                                <option value="low">پایین</option>
+                            </select>
                         </div>
 
                         <button type="submit" class="w-full glass-strong px-8 py-4 rounded-2xl text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" id="submitBtn">
@@ -424,7 +419,7 @@
                 </span>
         </div>
         <p class="text-gray-600 text-lg mb-8 max-w-2xl mx-auto">
-            بهترین و سریع‌ترین ابزار فشرده‌سازی تصویر با کیفیت حرفه‌ای
+            بهترین ابزار فشرده‌سازی تصویر با کیفیت حرفه‌ای
         </p>
         <div class="flex flex-wrap justify-center gap-8 text-gray-600 font-semibold mb-8">
             <a href="#" class="hover:text-blue-600 transition-all duration-300 hover:scale-110">حریم خصوصی</a>
