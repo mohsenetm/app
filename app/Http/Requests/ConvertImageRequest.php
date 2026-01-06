@@ -21,7 +21,7 @@ class ConvertImageRequest extends FormRequest
                 'max:10240' // 10MB
             ],
             'format' => [
-                'required',
+                'nullable',
                 'string',
                 'in:jpg,jpeg,png,webp,avif,gif'
             ],

@@ -96,6 +96,7 @@ Route::prefix('words')->group(function () {
     Route::delete('/{word}', [WordTranslationController::class, 'destroy']);
 });
 
+Route::get('/image', [ImageConversionController::class, 'image']);
 Route::post('/convert-image', [ImageConversionController::class, 'convert']);
 Route::get('/download-image/{filename}', [ImageConversionController::class, 'download']);
 
