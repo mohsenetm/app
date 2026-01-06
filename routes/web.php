@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ImageConversionController;
 use App\Http\Controllers\LogReadController;
 use App\Http\Controllers\MarkdownDirectoryController;
 use App\Http\Controllers\StudyController;
@@ -94,5 +95,8 @@ Route::prefix('words')->group(function () {
     // حذف کلمه
     Route::delete('/{word}', [WordTranslationController::class, 'destroy']);
 });
+
+Route::post('/convert-image', [ImageConversionController::class, 'convert']);
+Route::get('/download-image/{filename}', [ImageConversionController::class, 'download']);
 
 

@@ -1,0 +1,34 @@
+meta {
+  name: Convert Image
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/convert-image
+  body: form-data {
+    image: @file /path/to/image.jpg
+    format: jpg
+    quality: 85
+  }
+  auth: bearer {{token}}
+}
+
+params:query {
+  ~param1: value1
+}
+
+headers {
+  Content-Type: multipart/form-data
+}
+
+docs {
+  # Convert Image Request
+  
+  This endpoint converts an image to a different format.
+  
+  ## Request Parameters
+  - **image** (required, file): Image file to convert (jpg, jpeg, png, gif, bmp, webp, avif)
+  - **format** (required, string): Output format (jpg, jpeg, png, webp, avif, gif)
+  - **quality** (optional, integer): Output quality (1-100)
+}
